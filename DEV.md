@@ -2,6 +2,21 @@
 
 This fork only exists because I want to get `fillbetween` working: https://tikz.dev/pgfplots/libs-fillbetween
 
+Related repo:
+- https://github.com/scottwwh/web2js/tree/test/old-branch 
+
+Code has been successfully tested in [Obsidian TikZJax plugin](https://github.com/artisticat1/obsidian-tikzjax)..
+
+Dependencies:
+```
+obsidian-tikzjax
+- tikzjax
+  - web2js
+    - tex
+```
+
+---
+
 Various threads:
 - Dev workflow: https://github.com/artisticat1/obsidian-tikzjax/issues/8
 - Questions about workflow: https://github.com/artisticat1/obsidian-tikzjax/issues/11
