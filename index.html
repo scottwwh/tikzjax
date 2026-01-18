@@ -34,6 +34,20 @@
 \end{document}
 </script>
 
+<h1>tikzpicture</h1>
+<script type="text/tikz" data-show-console="true">%
+\begin{document}
+  \begin{tikzpicture}[domain=0:4]
+    \draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
+    \draw[->] (-0.2,0) -- (4.2,0) node[right] {$x$};
+    \draw[->] (0,-1.2) -- (0,4.2) node[above] {$f(x)$};
+    \draw[color=red]    plot (\x,\x)             node[right] {$f(x) =x$};
+    \draw[color=blue]   plot (\x,{sin(\x r)})    node[right] {$f(x) = \sin x$};
+    \draw[color=orange] plot (\x,{0.05*exp(\x)}) node[right] {$f(x) = \frac{1}{20} \mathrm e^x$};
+  \end{tikzpicture}
+\end{document}
+</script>
+
 <h1>pgfplots</h1>
 <script type="text/tikz" data-show-console="true">%
 \usepackage{pgfplots}
@@ -53,16 +67,39 @@ domain=-3:3
 \end{document}
 </script>
 
-<h1>tikzpicture</h1>
-<script type="text/tikz" data-show-console="true">%
+<h1>pgfplots.fillbetween</h1>
+<script type="text/tikz" data-show-console="true">
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{positioning, arrows.meta}
+\pgfplotsset{compat=1.16}
+\usepackage{amsmath}
 \begin{document}
-  \begin{tikzpicture}[domain=0:4]
-    \draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
-    \draw[->] (-0.2,0) -- (4.2,0) node[right] {$x$};
-    \draw[->] (0,-1.2) -- (0,4.2) node[above] {$f(x)$};
-    \draw[color=red]    plot (\x,\x)             node[right] {$f(x) =x$};
-    \draw[color=blue]   plot (\x,{sin(\x r)})    node[right] {$f(x) = \sin x$};
-    \draw[color=orange] plot (\x,{0.05*exp(\x)}) node[right] {$f(x) = \frac{1}{20} \mathrm e^x$};
+  \begin{tikzpicture}
+    \begin{axis}[
+      scale = 1.2,
+      xmin = 0, xmax = 10,
+      ymin = 0, ymax = 10,
+      axis lines* = left,
+      xtick = {0}, ytick = \empty,
+      clip = false,
+    ]
+    % Production-possibility frontier
+
+    \addplot [domain = 0:9, restrict y to domain = 0:9, samples = 200, color = blue, very thick, name path = frontier] {sqrt(81 - x^2)};
+
+    % Requires fillbetween
+    \addplot [domain = 0:9, restrict y to domain = 0:9, line width = 0pt, name path = axis] {0};
+
+    % Colouring areas
+    \addplot [blue, draw = none, fill opacity = 0.1] fill between [of = frontier and axis];
+
+    % Labels
+    \node [right] at (current axis.right of origin){$A$};
+    \node [above] at (current axis.above origin) {$B$};
+
+    \end{axis}
   \end{tikzpicture}
 \end{document}
 </script>
@@ -80,24 +117,6 @@ to[R=$R_1$, i>_=$i_1$] (2,0) -- (0,0);
 to[R=$R_2$, i>_=$i_2$]
 (4,0) to[short, -*] (2,0);
 \end{circuitikz}
-\end{document}
-</script>
-
-<h1>pgfplots</h1>
-<script type="text/tikz" data-show-console="true">%
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.16}
-\begin{document}
-\begin{tikzpicture}
-\begin{axis}[colormap/viridis]
-\addplot3[
-	surf,
-	samples=18,
-	domain=-3:3
-]
-{exp(-x^2-y^2)*x};
-\end{axis}
-\end{tikzpicture}
 \end{document}
 </script>
 
@@ -129,59 +148,6 @@ to[R=$R_2$, i>_=$i_2$]
 !\fragment{234}
 !\fragment{306}
 }
-\end{document}
-</script>
-
-<h1>pgfplots.fillbetween</h1>
-<script type="text/tikz" data-show-console="true">
-\usepackage{pgfplots}
-\usepgfplotslibrary{fillbetween}
-\pgfplotsset{compat=1.16}
-\begin{document}
-  \begin{tikzpicture}
-    \begin{axis}
-      \addplot[name path=A, domain=0:1] {x^2};
-      \addplot[name path=B, domain=0:1] {x};
-      \addplot fill between[of=A and B];
-    \end{axis}
-  \end{tikzpicture}
-\end{document}
-</script>
-
-<h1>PPB</h1>
-<script type="text/tikz" data-show-console="true">
-\usepackage{pgfplots}
-\usepackage{tikz}
-\usepgfplotslibrary{fillbetween}
-\usetikzlibrary{positioning, arrows.meta}
-\pgfplotsset{compat=1.16}
-\usepackage{amsmath}
-\begin{document}
-  \begin{tikzpicture}
-    \begin{axis}[
-      scale = 1.2,
-      xmin = 0, xmax = 10,
-      ymin = 0, ymax = 10,
-      axis lines* = left,
-      xtick = {0}, ytick = \empty,
-      clip = false,
-    ]
-    % Production-possibility frontier
-
-    \addplot [domain = 0:9, restrict y to domain = 0:9, samples = 100, color = blue, very thick, name path = frontier] {sqrt(81 - x^2)};
-
-    % Requires fillbetween
-    \addplot [domain = 0:9, restrict y to domain = 0:9, line width = 0pt, name path = axis] {0};
-
-    % Colouring areas
-    \addplot [blue, draw = none, fill opacity = 0.1] fill between [of = frontier and axis];
-
-    % Labels
-    \node [right] at (current axis.right of origin){$A$};
-    \node [above] at (current axis.above origin) {$B$};
-
-    \end{axis}
-  \end{tikzpicture}
 \end{document}
 </script>
 
