@@ -17,6 +17,7 @@ for (const texFile of files) {
 	let sysFile = spawnSync('kpsewhich', [texFile]).stdout.toString().trim();
 	if (sysFile == '') {
 		console.log(`\t\x1b[31mUnable to locate ${texFile}.\x1b[0m`);
+		process.exit(0); // Validate that files are being found
 		continue;
 	}
 

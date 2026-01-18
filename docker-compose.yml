@@ -3,5 +3,7 @@ services:
   develop:
     build:
       context: .
+      platforms:
+        - linux/amd64 # Needed to avoid "Error: This platform not supported" when installing wasm-opt on M1
     stdin_open: true 
     tty: true

@@ -14,6 +14,10 @@ RUN apt install -y libkpathsea-dev
 
 RUN apt install -y texlive
 RUN apt install -y texlive-latex-extra
+# Confirm latest in upstream
+# RUN apt install -y texlive-latex-recommended
+# RUN apt install -y texlive-pictures
+# RUN apt install -y texlive-plain-generic
 
 #### NODEJS ################################################
 
@@ -38,7 +42,8 @@ RUN npm --version
 # clone web2js and switch to ww-modifications branch
 RUN git clone https://github.com/drgrice1/web2js.git
 WORKDIR /code/web2js
-RUN git checkout d78ef1f3ec94520c88049b1de36ecf6be2a65c10
+# Testing with latest since it's been a couple of years
+# RUN git checkout d78ef1f3ec94520c88049b1de36ecf6be2a65c10
 
 # switch to https:// protocol because github deprecated git://
 # https://github.com/npm/cli/issues/4896#issuecomment-1128472004
@@ -47,10 +52,11 @@ RUN npm install --save-dev wasm-opt
 
 # generate tex.wasm and core.dump files
 RUN npm install --loglevel verbose
+# Latest script now includes all subsequent steps
 RUN npm run build
-RUN npm run generate-wasm
-RUN ./node_modules/wasm-opt/bin/wasm-opt --asyncify --pass-arg=asyncify-ignore-indirect --pass-arg=asyncify-imports@library.reset -O4 out.wasm -o tex.wasm
-RUN node initex.js
+# RUN npm run generate-wasm
+# RUN ./node_modules/wasm-opt/bin/wasm-opt --asyncify --pass-arg=asyncify-ignore-indirect --pass-arg=asyncify-imports@library.reset -O4 out.wasm -o tex.wasm
+# RUN node initex.js
 
 # compress tex.wasm and core.dump
 RUN gzip tex.wasm

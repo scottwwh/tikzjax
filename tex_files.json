@@ -40,6 +40,8 @@
 	"pgflibraryshapes.multipart.code.tex",
 	"pgflibraryshapes.symbols.code.tex",
 	"pgflibrarysvg.path.code.tex",
+	"pgflibraryfillbetween.code.tex",
+	"tikzlibrarypgfplots.fillbetween.code.tex",
 	"pgfmoduleanimations.code.tex",
 	"pgfmodulebending.code.tex",
 	"pgfmoduledatavisualization.code.tex",
