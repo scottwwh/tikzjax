@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
-# docker compose up --build -d
-docker compose up --build --force-recreate -d
+# Has issues when pushing new commits to remote
+docker compose up --build -d
+
+# Clear all previous layers
+# docker compose build --no-cache
+# docker compose up # --build --force-recreate -d
 
 mkdir -p output
 docker compose cp develop:/code/tikzjax/dist/fonts.css ./output

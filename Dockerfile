@@ -1,5 +1,9 @@
 FROM ubuntu:20.04
 
+# Updating (to match web2js) causes issues installing node-kpathsea.git
+# later on, seemingly related to nodegyp ?
+# FROM ubuntu:24.04
+
 RUN apt update
 
 RUN apt-get update && \
@@ -40,10 +44,23 @@ RUN npm --version
 #### WEB2JS ################################################
 
 # clone web2js and switch to ww-modifications branch
-RUN git clone https://github.com/drgrice1/web2js.git
-WORKDIR /code/web2js
+# RUN git clone https://github.com/drgrice1/web2js.git
+# WORKDIR /code/web2js
+# 
 # Testing with latest since it's been a couple of years
 # RUN git checkout d78ef1f3ec94520c88049b1de36ecf6be2a65c10
+
+
+# Temp (personal) branch
+RUN git clone -b test/old-branch https://github.com/scottwwh/web2js.git --single-branch
+WORKDIR /code/web2js
+# 
+# Include changes to preamble (from latest)
+# RUN git checkout feature/fillbetween
+#
+# Force specific commit with changes (lean into the cache)
+RUN git pull
+RUN git checkout a96f31bcb42d5554c03ddcf434afa72c74cdc2c0
 
 # switch to https:// protocol because github deprecated git://
 # https://github.com/npm/cli/issues/4896#issuecomment-1128472004
@@ -52,11 +69,15 @@ RUN npm install --save-dev wasm-opt
 
 # generate tex.wasm and core.dump files
 RUN npm install --loglevel verbose
-# Latest script now includes all subsequent steps
+
+# Old commit
 RUN npm run build
-# RUN npm run generate-wasm
-# RUN ./node_modules/wasm-opt/bin/wasm-opt --asyncify --pass-arg=asyncify-ignore-indirect --pass-arg=asyncify-imports@library.reset -O4 out.wasm -o tex.wasm
-# RUN node initex.js
+RUN npm run generate-wasm
+RUN ./node_modules/wasm-opt/bin/wasm-opt --asyncify --pass-arg=asyncify-ignore-indirect --pass-arg=asyncify-imports@library.reset -O4 out.wasm -o tex.wasm
+RUN node initex.js
+
+# Latest script now includes all subsequent steps
+# RUN npm run build
 
 # compress tex.wasm and core.dump
 RUN gzip tex.wasm

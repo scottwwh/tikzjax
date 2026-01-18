@@ -132,5 +132,58 @@ to[R=$R_2$, i>_=$i_2$]
 \end{document}
 </script>
 
+<h1>pgfplots.fillbetween</h1>
+<script type="text/tikz" data-show-console="true">
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+\pgfplotsset{compat=1.16}
+\begin{document}
+  \begin{tikzpicture}
+    \begin{axis}
+      \addplot[name path=A, domain=0:1] {x^2};
+      \addplot[name path=B, domain=0:1] {x};
+      \addplot fill between[of=A and B];
+    \end{axis}
+  \end{tikzpicture}
+\end{document}
+</script>
+
+<h1>PPB</h1>
+<script type="text/tikz" data-show-console="true">
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{positioning, arrows.meta}
+\pgfplotsset{compat=1.16}
+\usepackage{amsmath}
+\begin{document}
+  \begin{tikzpicture}
+    \begin{axis}[
+      scale = 1.2,
+      xmin = 0, xmax = 10,
+      ymin = 0, ymax = 10,
+      axis lines* = left,
+      xtick = {0}, ytick = \empty,
+      clip = false,
+    ]
+    % Production-possibility frontier
+
+    \addplot [domain = 0:9, restrict y to domain = 0:9, samples = 100, color = blue, very thick, name path = frontier] {sqrt(81 - x^2)};
+
+    % Requires fillbetween
+    \addplot [domain = 0:9, restrict y to domain = 0:9, line width = 0pt, name path = axis] {0};
+
+    % Colouring areas
+    \addplot [blue, draw = none, fill opacity = 0.1] fill between [of = frontier and axis];
+
+    % Labels
+    \node [right] at (current axis.right of origin){$A$};
+    \node [above] at (current axis.above origin) {$B$};
+
+    \end{axis}
+  \end{tikzpicture}
+\end{document}
+</script>
+
 </body>
 </html>
